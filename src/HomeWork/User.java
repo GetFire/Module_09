@@ -1,18 +1,68 @@
-package HomeWork;
+package HomeWork.Module7;
 
-
-public class User {
-    private static long idVar = 1;
+public class User  {
     private long id;
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String city;
+    private int balance;
 
-    public User(String name) {
-        this.name = name;
-        id = idVar;
-        idVar++;
+
+    public User(long id, String firstName, String lastName, String city, int balance) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.city = city;
+        this.balance = balance;
     }
 
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -21,25 +71,21 @@ public class User {
 
         User user = (User) o;
 
-        return id == user.id;
+        if (id != user.id) return false;
+        if (balance != user.balance) return false;
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
+        return city != null ? city.equals(user.city) : user.city == null;
 
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
-    }
-
-    @Override
-    public String toString() {
-        return "{" + name + "}";
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + balance;
+        return result;
     }
 }
