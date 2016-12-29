@@ -1,4 +1,4 @@
-package HomeWork.Module7;
+package HomeWork;
 
 
 import java.util.Comparator;

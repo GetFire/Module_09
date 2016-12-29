@@ -1,3 +1,3 @@
-package HomeWork.Module7;
+package HomeWork;
 
 public enum Currency {USD, EUR, UAH}
