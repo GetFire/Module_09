@@ -2,29 +2,36 @@ package HomeWork;
 
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utils {
     private Utils() {
     }
-    public static Map<Currency,List<Order>> splitByCurrency(List<Order>list){
-        Map<Currency,List<Order>> map = new HashMap<>();
+
+    public static Map<Currency, List<Order>> splitByCurrency(List<Order> list) {
+//        Stream<Order> stream = list.stream().
+
+
+        Map<Currency, List<Order>> map = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             Currency curr = list.get(i).getCurrency();
-            if (!map.containsKey(curr)){
-                map.put(curr,new ArrayList<Order>(Arrays.asList(list.get(i))));
+            if (!map.containsKey(curr)) {
+                map.put(curr, new ArrayList<Order>(Arrays.asList(list.get(i))));
                 continue;
             }
-            if (map.containsKey(curr)){
-                List<Order>tmp = map.get(curr);
+            if (map.containsKey(curr)) {
+                List<Order> tmp = map.get(curr);
                 tmp.add(list.get(i));
-                map.put(curr,tmp);
+                map.put(curr, tmp);
             }
         }
         return map;
     }
 
-    public static Map<String,List<Order>> splitByCity(List<Order>list){
-        Map<String,List<Order>> map = new HashMap<>();
+    public static Map<String, List<Order>> splitByCity(List<Order> list) {
+        Map<String, List<Order>> map = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             String s = list.get(i).getUser().getCity();
             if (!map.containsKey(s)) {
@@ -32,7 +39,7 @@ public class Utils {
                 continue;
             }
             if (map.containsKey(s)) {
-                List<Order>tmp = map.get(s);
+                List<Order> tmp = map.get(s);
                 tmp.add(list.get(i));
                 map.put(s, tmp);
             }
@@ -43,21 +50,22 @@ public class Utils {
     }
 
     public static List<Order> removeDuplicates(List<Order> list) {
-        Set<Order> set = new HashSet<>(list);
-        list.clear();
-        list.addAll(set);
-        return list;
+        return list.stream().distinct().collect(Collectors.toList());
+
+
     }
 
     public static List<Order> removeLess(List<Order> list, int price) {
-        for (int i = 0; i < list.size(); i++) {
-            int pr = list.get(i).getPrice();
-            if (pr < price) {
-                list.remove(i);
-                i--;
-            }
-        }
-        return list;
+        return list.stream().filter(a -> a.getPrice() > price).collect(Collectors.toList());
+
+//        for (int i = 0; i < list.size(); i++) {
+//            int pr = list.get(i).getPrice();
+//            if (pr < price) {
+//                list.remove(i);
+//                i--;
+//            }
+//        }
+//        return list;
     }
 
     public static List<Order> createOrders() {
@@ -92,7 +100,7 @@ public class Utils {
         return orders;
     }
 
-    public static List<Order> createOrdersWithDuplicates(){
+    public static List<Order> createOrdersWithDuplicates() {
         Currency curUAH = Currency.UAH;
         Currency curUSD = Currency.USD;
 
@@ -119,7 +127,7 @@ public class Utils {
         Order o9 = new Order(1012, 5000, curUSD, "Audi A8", "AudiUA", us3);
         Order o10 = new Order(1012, 5000, curUSD, "Audi A8", "AudiUA", us3);
 
-        Collections.addAll(orders,o1, o2, o3, o4, o5, o6, o7, o8, o9, o10);
+        Collections.addAll(orders, o1, o2, o3, o4, o5, o6, o7, o8, o9, o10);
         return orders;
     }
 
@@ -415,26 +423,29 @@ public class Utils {
 
     }
 
-    public static boolean checkContains(Set<Order>set,String s){
-        boolean answer = false;
-        for (Order order : set) {
-           if(order.getUser().getLastName().equals(s))
-               answer = true;
-
-        }
-        return answer;
+    public static boolean checkContains(Set<Order> set, String s) {
+        return set.stream().anyMatch(a -> a.getUser().getLastName().equals(s));
+//        boolean answer = false;
+//        for (Order order : set) {
+//            if (order.getUser().getLastName().equals(s))
+//                answer = true;
+//
+//        }
+//        return answer;
     }
 
-    public static NavigableSet<Order> deleteUSD(NavigableSet<Order>set){
+    public static NavigableSet<Order> deleteUSD(NavigableSet<Order> set) {
 
-        Iterator<Order> it = set.iterator();
-        while(it.hasNext()){
-            Order order = it.next();
-            if(order.getCurrency()== Currency.USD)
-                it.remove();
-        }
+        return set.stream().filter(s -> s.getCurrency() != Currency.USD).collect(Collectors.toCollection(TreeSet::new));
 
-        return set;
+//        Iterator<Order> it = set.iterator();
+//        while (it.hasNext()) {
+//            Order order = it.next();
+//            if (order.getCurrency() == Currency.USD)
+//                it.remove();
+//        }
+//
+//        return set;
     }
 
 
